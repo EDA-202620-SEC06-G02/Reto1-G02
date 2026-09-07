@@ -8,22 +8,35 @@ from DataStructures.List import single_linked_list as sll
 from DataStructures.Stack import stack
 from DataStructures.Queue import queue
 
+data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
+
 def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
     """
     #TODO: Llama a las funciónes de creación de las estructuras de datos
-    pass
-
+    catalog = {"chocolate_sale":None}
+    catalog["chocolate_sale"] = arr.new_list()
+    return catalog
 
 # Funciones para la carga de datos
 
-def load_data(catalog, filename):
+def load_data(catalog):
     """
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
-    pass
+    start_time = get_time()
+    
+    chocolatefile = data_dir + "chocolate_sale_20_ptc.csv"
+    input_file = csv.DictReader(open(chocolatefile, encoding='utf-8'))
+    for order in input_file:
+        arr.add_last(catalog['chocolate_sale'], order)
+    
+    end_time = get_time()
+    total_time = delta_time(start_time, end_time)
+    
+    return catalog, total_time
 
 # Funciones de consulta sobre el catálogo
 
