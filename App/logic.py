@@ -1,4 +1,12 @@
 import time
+import csv
+import os
+
+#Importacion de estructuras de datos
+from DataStructures.List import array_list as arr
+from DataStructures.List import single_linked_list as sll
+from DataStructures.Stack import stack
+from DataStructures.Queue import queue
 
 def new_logic():
     """
