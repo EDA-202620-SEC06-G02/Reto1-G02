@@ -28,7 +28,7 @@ def load_data(catalog):
     # TODO: Realizar la carga de datos
     start_time = get_time()
     
-    chocolatefile = data_dir + "chocolate_sale_20_ptc.csv"
+    chocolatefile = data_dir + "chocolate_sale_100_ptc.csv"
     input_file = csv.DictReader(open(chocolatefile, encoding='utf-8'))
     for order in input_file:
         arr.add_last(catalog['chocolate_sale'], order)
