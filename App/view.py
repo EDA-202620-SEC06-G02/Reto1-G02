@@ -30,12 +30,12 @@ def load_data(control):
     return catalog, total_time
 
 
-def print_data(control): #agregar parametro id (control, id)
+def print_data(control, id):
     """
         Función que imprime un dato dado su ID
     """
     #TODO: Realizar la función para imprimir un elemento
-    print(control)
+    pass
 
 def print_req_1(control):
     """
@@ -100,7 +100,7 @@ def main():
         if int(inputs) == 0:
             print("Cargando información de los archivos ....\n")
             data = load_data(control)
-            print_data(control)
+            print(control)
         elif int(inputs) == 1:
             print_req_1(control)
 
