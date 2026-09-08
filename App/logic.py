@@ -49,12 +49,67 @@ def req_1(catalog):
     pass
 
 
-def req_2(catalog):
+def req_2(catalog, p_min, p_max):
     """
     Retorna el resultado del requerimiento 2
     """
     # TODO: Modificar el requerimiento 2
-    pass
+    inicio=get_time()
+    resultado={}
+    pedidos=catalog["chocolate_sale"]
+    
+    pedidos_en_rango=sll.new_list()
+    cantidad_pedidos_en_rango=0
+    for i in range(arr.size(pedidos)):
+        pedido=arr.get_element(pedidos, i)
+        precio=float(pedido["Price_per_Box"])
+        if precio >= p_min and precio <= p_max:
+            cantidad_pedidos_en_rango += 1
+            sll.add_last(pedidos_en_rango, pedido)
+            
+    resultado["cantidad_pedidos_en_rango"]=cantidad_pedidos_en_rango
+    
+    actual=pedidos_en_rango["first"]
+    suma_discount=0
+    suma_marketing=0
+    suma_price=0
+    mas_r=sll.first_element(pedidos_en_rango)
+    
+    
+    while actual is not None:
+        pedido=actual["info"]
+        suma_discount += float(pedido["Discount_Pct"])
+        suma_marketing += float(pedido["Marketing_Spend"])
+        suma_price += float(pedido["Price_per_Box"])
+        
+        comparacion=sll.default_function(mas_r["Order_Date"], pedido["Order_Date"])
+        
+        if comparacion == -1:
+            mas_r=pedido
+            
+        if comparacion == 0:
+            c_amount=sll.default_function(float(mas_r["Amount"]), float(pedido["Amount"]))
+            if c_amount == -1:
+                mas_r=pedido
+        actual=actual["next"]
+        
+        
+    promedio_Discount_Pct=suma_discount/cantidad_pedidos_en_rango
+    resultado["promedio_de_Discount_Pct"]=promedio_Discount_Pct
+    
+    promedio_Marketing_Spend=suma_marketing/cantidad_pedidos_en_rango
+    resultado["promedio_de_Marketing_Spend"]=promedio_Marketing_Spend
+    
+    promedio_Price_per_Box=suma_price/cantidad_pedidos_en_rango
+    resultado["promedio_de_Price_per_Box"]=promedio_Price_per_Box
+    
+    
+
+
+    fin=get_time()
+    tiempo_ejecucion=delta_time(inicio, fin)
+    resultado["tiempo_ejecucion"]=tiempo_ejecucion
+    return resultado
 
 
 def req_3(catalog):
