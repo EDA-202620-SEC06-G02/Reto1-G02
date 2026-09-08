@@ -28,7 +28,7 @@ def load_data(catalog):
     # TODO: Realizar la carga de datos
     start_time = get_time()
     
-    chocolatefile = data_dir + "chocolate_sale_100_ptc.csv"
+    chocolatefile = data_dir + "chocolate_sale_15_elements.csv"
     input_file = csv.DictReader(open(chocolatefile, encoding='utf-8'))
     for order in input_file:
         arr.add_last(catalog['chocolate_sale'], order)
@@ -39,7 +39,12 @@ def load_data(catalog):
     return catalog, total_time
 
 # Funciones de consulta sobre el catálogo
-
+def req_0(catalog, total_time):
+    """
+    Retorna el resultado del requerimiento Carga de Datos
+    """
+    # TODO: Modificar el requerimiento Carga de Datos
+    pass
 
 def req_1(catalog):
     """

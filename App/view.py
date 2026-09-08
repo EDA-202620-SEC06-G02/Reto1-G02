@@ -26,11 +26,10 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    catalog, total_time = logic.load_data(control)
-    return catalog, total_time
+    control = logic.load_data(control)
+    return control
 
-
-def print_data(control, id):
+def print_req_0(control, id):
     """
         Función que imprime un dato dado su ID
     """
@@ -99,8 +98,6 @@ def main():
         inputs = input('Seleccione una opción para continuar\n')
         if int(inputs) == 0:
             print("Cargando información de los archivos ....\n")
-            data = load_data(control)
-            print(control)
         elif int(inputs) == 1:
             print_req_1(control)
 
