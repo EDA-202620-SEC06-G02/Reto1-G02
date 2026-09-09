@@ -1,6 +1,6 @@
 import sys
 import App.logic as logic
-
+from tabulate import tabulate
 
 def new_logic():
     """
@@ -50,6 +50,19 @@ def print_req_2(control):
         Función que imprime la solución del Requerimiento 2 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 2
+    
+    input_min = input("Ingrese el precio mínimo por caja: ")
+    input_max = input("Ingrese el precio máximo por caja: ")
+    
+    retorno = logic.req_2(control, float(input_min), float(input_max))
+    
+    if retorno == False:
+        print("No hay pedidos en el rango de precios")
+        return
+    encabezado=list(retorno.keys())
+    filas=[list(retorno.values())]
+    
+    print(tabulate(filas, headers=encabezado, tablefmt="fancy_grid"))
     pass
 
 
