@@ -28,24 +28,48 @@ def load_data(catalog):
     # TODO: Realizar la carga de datos
     start_time = get_time()
     
+    #Variables de carga
+    product_min = None
+    product_max = None
+    first_five = arr.new_list()
+    last_five = queue.new_queue()
+    
     chocolatefile = data_dir + "chocolate_sale_15_elements.csv"
     input_file = csv.DictReader(open(chocolatefile, encoding='utf-8'))
     for order in input_file:
         arr.add_last(catalog['chocolate_sale'], order)
+        
+        #Calcular producto con el menor precio
+        if (product_min is None) or (order["Amount"] < product_min["Amount"]):
+            product_min = order
+        
+        #Calcular producto con el mayor precio
+        if (product_max is None) or (order["Amount"] > product_max["Amount"]):
+            product_max = order
+            
+        #Calcular primeras 5
+        if catalog["chocolate_sale"]["size"] < 5:
+            arr.add_last(first_five)
+            
+        #Calcular ultimas 5 con QUEUE
+        queue.enqueue(last_five, order)
+        if queue.size(last_five) > 5:
+            queue.dequeue(last_five)
+    
+    #Total de pedidos cargados
+    total_pedidos = catalog["chocolate_sale"]["size"]
     
     end_time = get_time()
     total_time = delta_time(start_time, end_time)
     
-    return catalog, total_time
+    return {"total_time": total_time,
+            "total_pedidos": total_pedidos,
+            "product_min": product_min,
+            "product_max": product_max,
+            "first_five": first_five,
+            "last_five": last_five}
 
 # Funciones de consulta sobre el catálogo
-def req_0(catalog, total_time):
-    """
-    Retorna el resultado del requerimiento Carga de Datos
-    """
-    # TODO: Modificar el requerimiento Carga de Datos
-    pass
-
 def req_1(catalog):
     """
     Retorna el resultado del requerimiento 1

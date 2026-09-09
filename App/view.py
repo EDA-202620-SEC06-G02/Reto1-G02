@@ -26,14 +26,14 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    control = logic.load_data(control)
-    return control
+    result = logic.load_data(control)
+    
+    
 
-def print_req_0(control, id):
+def print_data(control, id):
     """
         Función que imprime un dato dado su ID
     """
-    #TODO: Realizar la función para imprimir un elemento
     pass
 
 def print_req_1(control):
