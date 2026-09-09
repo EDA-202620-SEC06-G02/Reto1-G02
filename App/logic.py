@@ -59,6 +59,7 @@ def req_2(catalog):
     Retorna el resultado del requerimiento 2
     """
     # TODO: Modificar el requerimiento 2
+    
     pass
 
 
@@ -78,12 +79,37 @@ def req_4(catalog):
     pass
 
 
-def req_5(catalog):
+def req_5(catalog, filtro, producto, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
+    inicio = get_time()
+    resultado = {}
+    resultado["Filtro"] = filtro
+    pedidos=catalog["chocolate_sale"]
+    
+    pedidos_en_rango_f=sll.new_list()
+    cantidad_pedidos_en_rango_f=0
+    for i in range(arr.size(pedidos)):
+        pedido=arr.get_element(pedidos, i)
+        if pedido["Product"] == producto:
+            fecha=float(pedido["Order_Date"])
+            if fecha >= fecha_inicial and fecha <= fecha_final:
+                cantidad_pedidos_en_rango_f += 1
+                sll.add_last(pedidos_en_rango_f, pedido)
+    
+    if sll.size(pedidos_en_rango_f) == 0:
+                return False
+            
+    resultado["cantidad_pedidos_en_rango_fecha"]=cantidad_pedidos_en_rango_f
+
+    
+    final = get_time()
+    tiempo_final = delta_time(inicio, final)
+    resultado["Tiempo"] = tiempo_final
+    
+    return resultado
 
 def req_6(catalog):
     """
