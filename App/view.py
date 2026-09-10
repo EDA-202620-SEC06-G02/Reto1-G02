@@ -57,7 +57,29 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    
+    country = input("Ingrese el País: ")
+    channel = input("Ingrese el Canal (Retail, Online, Wholesale): ")
+
+    result = logic.req_3(control, country, channel)
+
+    print("\n" + "="*40)
+    print(" RESULTADOS DEL REQUERIMIENTO 3")
+    print("="*40)
+    print(f"Tiempo de ejecución: {result['execution_time']:.3f} ms")
+    print(f"Total de pedidos encontrados: {result['count']}")
+    
+    if result['count'] > 0:
+        print(f"Promedio de Precio por Caja: ${result['avg_price']:.2f}")
+        print(f"Promedio de Descuento: {result['avg_discount']:.2f}%")
+        print(f"Promedio de Inversión en Mercadeo: ${result['avg_marketing']:.2f}")
+        print(f"Promedio de Cajas Enviadas: {result['avg_boxes']:.2f}")
+        print(f"Producto más frecuente: {result['most_frequent_product']}")
+        print(f"Año con más pedidos: {result['most_frequent_year']}")
+    else:
+        print("No se encontraron registros para la combinación especificada.")
+    print("="*40 + "\n")
+    
 
 
 def print_req_4(control):

@@ -31,6 +31,22 @@ def load_data(catalog):
     chocolatefile = data_dir + "chocolate_sale_15_elements.csv"
     input_file = csv.DictReader(open(chocolatefile, encoding='utf-8'))
     for order in input_file:
+        
+        # --- CONVERSIÓN DE TIPOS ---
+        
+        order['Order_ID'] = order['Order_ID'] if order['Order_ID'] else "Unknown"
+        order['Product'] = order['Product'] if order['Product'] else "Unknown"
+        order['Country'] = order['Country'] if order['Country'] else "Unknown"
+        order['Channel'] = order['Channel'] if order['Channel'] else "Unknown"
+        order['Order_Date'] = order['Order_Date'] if order['Order_Date'] else "Unknown"
+        
+        order['Discount_Pct'] = float(order['Discount_Pct']) if order['Discount_Pct'] else 0.0
+        order['Price_per_Box'] = float(order['Price_per_Box']) if order['Price_per_Box'] else 0.0
+        order['Marketing_Spend'] = float(order['Marketing_Spend']) if order['Marketing_Spend'] else 0.0
+        order['Amount'] = float(order['Amount']) if order['Amount'] else 0.0
+        
+        order['Boxes_Shipped'] = int(order['Boxes_Shipped']) if order['Boxes_Shipped'] else 0
+        
         arr.add_last(catalog['chocolate_sale'], order)
     
     end_time = get_time()
@@ -62,12 +78,76 @@ def req_2(catalog):
     pass
 
 
-def req_3(catalog):
+def req_3(catalog, Country, Channel):
     """
     Retorna el resultado del requerimiento 3
     """
     # TODO: Modificar el requerimiento 3
-    pass
+    
+    start_time = get_time()
+    
+    sales_list = catalog['chocolate_sale']
+    total_elements = arr.size(sales_list)
+
+    count = 0
+    sum_price = 0.0
+    sum_discount = 0.0
+    sum_marketing = 0.0
+    sum_boxes = 0
+
+    product_counts = {}
+    year_counts = {}
+    
+    for i in range(total_elements):
+        order = arr.get_element(sales_list, i)
+
+        if order['Country'] == Country and order['Channel'] == Channel:
+            count += 1
+            sum_price += order['Price_per_Box']
+            sum_discount += order['Discount_Pct']
+            sum_marketing += order['Marketing_Spend']
+            sum_boxes += order['Boxes_Shipped']
+
+            prod = order['Product']
+            product_counts[prod] = product_counts.get(prod, 0) + 1
+
+            date_str = str(order['Order_Date'])
+            year = date_str.split('-')[0]
+            year_counts[year] = year_counts.get(year, 0) + 1
+            
+    end_time = get_time()
+    execution_time = delta_time(start_time, end_time)
+    
+    if count == 0:
+        return {
+            "execution_time": execution_time,
+            "count": 0,
+            "avg_price": 0.0,
+            "avg_discount": 0.0,
+            "avg_marketing": 0.0,
+            "avg_boxes": 0.0,
+            "most_frequent_product": "Unknown",
+            "most_frequent_year": "Unknown"
+        }
+    
+    avg_price = sum_price / count
+    avg_discount = sum_discount / count
+    avg_marketing = sum_marketing / count
+    avg_boxes = sum_boxes / count
+
+    most_frequent_product = max(product_counts, key=product_counts.get)
+    most_frequent_year = max(year_counts, key=year_counts.get)
+
+    return {
+        "execution_time": execution_time,
+        "count": count,
+        "avg_price": avg_price,
+        "avg_discount": avg_discount,
+        "avg_marketing": avg_marketing,
+        "avg_boxes": avg_boxes,
+        "most_frequent_product": most_frequent_product,
+        "most_frequent_year": most_frequent_year
+    }
 
 
 def req_4(catalog):
