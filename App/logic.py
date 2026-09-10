@@ -71,6 +71,15 @@ def load_data(catalog):
             "first_five": first_five,
             "last_five": last_five}
 
+def new_logic():
+    """
+    Crea el catalogo para almacenar las estructuras de datos
+    """
+    #TODO: Llama a las funciónes de creación de las estructuras de datos
+    catalog = {"chocolate_sale":None}
+    catalog["chocolate_sale"] = arr.new_list()
+    return catalog
+
 # Funciones de consulta sobre el catálogo
 def req_1(catalog, producto):
     """
