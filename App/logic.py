@@ -10,17 +10,6 @@ from DataStructures.Queue import queue
 
 data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 
-def new_logic():
-    """
-    Crea el catalogo para almacenar las estructuras de datos
-    """
-    #TODO: Llama a las funciónes de creación de las estructuras de datos
-    catalog = {"chocolate_sale":None}
-    catalog["chocolate_sale"] = arr.new_list()
-    return catalog
-
-# Funciones para la carga de datos
-
 def load_data(catalog):
     """
     Carga los datos del reto

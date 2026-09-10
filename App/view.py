@@ -29,20 +29,37 @@ def load_data(control):
     result = logic.load_data(control)
     
     
-
 def print_data(control, id):
     """
         Función que imprime un dato dado su ID
     """
-    pass
+    encontrado = None
+    for order in control["chocolate_sale"]["elements"]:
+        if order["Order_ID"] == id and encontrado is None:
+            encontrado = order
+    
+    if encontrado is None:
+        print("No se encontro")
+    else:
+        print(tabulate([encontrado], headers="keys", tablefmt="fancy_grid"))
 
 def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
-
+    producto = input("Nombre: ")
+    
+    retorno = logic.req_1(control, producto)
+    
+    if retorno == False:
+        print("No encontrado")
+        return
+    
+    filas = []
+    for llave in retorno:
+        filas.append([llave, retorno[llave]])
+    
+    print(tabulate(filas, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
 
 def print_req_2(control):
     """
@@ -111,7 +128,20 @@ def print_req_6(control):
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    fecha_inicio = input("Fecha inicial: ")
+    fecha_fin = input("Fecha final: ")
+    
+    retorno = logic.req_6(control, fecha_inicio, fecha_fin)
+    
+    if retorno == False:
+        print("No encontrado")
+        return
+    
+    filas = []
+    for llave in retorno:
+        filas.append([llave, retorno[llave]])
+    
+    print(tabulate(filas, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
 
 # Se crea la lógica asociado a la vista
 control = new_logic()
@@ -128,6 +158,7 @@ def main():
         inputs = input('Seleccione una opción para continuar\n')
         if int(inputs) == 0:
             print("Cargando información de los archivos ....\n")
+            load_data(control)
         elif int(inputs) == 1:
             print_req_1(control)
 
@@ -143,7 +174,7 @@ def main():
         elif int(inputs) == 5:
             print_req_5(control)
 
-        elif int(inputs) == 5:
+        elif int(inputs) == 6:
             print_req_6(control)
 
         elif int(inputs) == 7:
