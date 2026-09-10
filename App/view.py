@@ -87,7 +87,35 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    
+    product = input("Ingrese el Producto: ").strip().title()
+    country = input("Ingrese el País: ").strip().title()
+
+    result = logic.req_4(control, product, country)
+
+    print("\n" + "="*50)
+    print(" RESULTADOS DEL REQUERIMIENTO 4")
+    print("="*50)
+    print(f"Tiempo de ejecución: {result['execution_time']:.3f} ms")
+    print(f"Total de pedidos encontrados: {result['count']}")
+
+    if result['count'] > 0:
+        print(f"Promedio de Precio por Caja: ${result['avg_price']:.2f}")
+        print(f"Promedio de Descuento: {result['avg_discount']:.2f}%")
+        print(f"Promedio de Inversión en Mercadeo: ${result['avg_marketing']:.2f}")
+        print(f"Promedio de Cajas Enviadas: {result['avg_boxes']:.2f}")
+        
+        print("\n--- Top 2 Pedidos con mayor Amount ---")
+        for idx, order in enumerate(result['top_orders'], 1):
+            print(f"\n[Pedido #{idx}]")
+            print(f"  ID Pedido: {order['Order_ID']}")
+            print(f"  Canal: {order['Channel']}")
+            print(f"  Fecha: {order['Order_Date']}")
+            print(f"  Cajas Enviadas: {order['Boxes_Shipped']}")
+            print(f"  Monto (Amount): ${order['Amount']:.2f}")
+    else:
+        print("No se encontraron registros para la combinación especificada.")
+    print("="*50 + "\n")
 
 
 def print_req_5(control):
