@@ -87,7 +87,22 @@ def print_req_5(control):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 5
+    # TODO: Imprimir el resultado del requerimiento 5}
+    
+    filtro = int(input("Ingrese el numero de el filtro que desea aplicar: \n1. 1.MAYOR\n2. 2.MENOR\n"))
+    
+        
+    retorno = logic.req_5(catalog, filtro, producto, fecha_inicial, fecha_final)
+        
+    if retorno == False:
+        print("No hay pedidos en el rango de precios")
+        return
+    encabezado=retorno.keys()
+    filas=retorno.values()
+        
+    tabla_vertical=zip(encabezado, filas)
+        
+    print(tabulate(tabla_vertical, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
     pass
 
 
