@@ -1,6 +1,6 @@
 import sys
 import App.logic as logic
-
+from tabulate import tabulate
 
 def new_logic():
     """
@@ -49,6 +49,21 @@ def print_req_2(control):
         Función que imprime la solución del Requerimiento 2 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 2
+    
+    input_min = input("Ingrese el precio mínimo por caja: ")
+    input_max = input("Ingrese el precio máximo por caja: ")
+    
+    retorno = logic.req_2(control, float(input_min), float(input_max))
+    
+    if retorno == False:
+        print("No hay pedidos en el rango de precios")
+        return
+    encabezado=retorno.keys()
+    filas=retorno.values()
+    
+    tabla_vertical=zip(encabezado, filas)
+    
+    print(tabulate(tabla_vertical, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
     pass
 
 
@@ -72,7 +87,22 @@ def print_req_5(control):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 5
+    # TODO: Imprimir el resultado del requerimiento 5}
+    
+    filtro = int(input("Ingrese el numero de el filtro que desea aplicar: \n1. 1.MAYOR\n2. 2.MENOR\n"))
+    
+        
+    retorno = logic.req_5(catalog, filtro, producto, fecha_inicial, fecha_final)
+        
+    if retorno == False:
+        print("No hay pedidos en el rango de precios")
+        return
+    encabezado=retorno.keys()
+    filas=retorno.values()
+        
+    tabla_vertical=zip(encabezado, filas)
+        
+    print(tabulate(tabla_vertical, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
     pass
 
 

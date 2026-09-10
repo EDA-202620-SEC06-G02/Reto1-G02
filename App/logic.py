@@ -211,12 +211,132 @@ def req_1(catalog, producto):
             "pedido_mayor_amount": pedido_mayor_amount,
             "pedido_menor_amount": pedido_menor_amount}
 
-def req_2(catalog):
+def req_2(catalog, p_min, p_max):
     """
     Retorna el resultado del requerimiento 2
     """
     # TODO: Modificar el requerimiento 2
-    pass
+    inicio=get_time()
+    resultado={}
+    pedidos=catalog["chocolate_sale"]
+    
+    
+    pedidos_en_rango=sll.new_list()
+    cantidad_pedidos_en_rango=0
+    for i in range(arr.size(pedidos)):
+        pedido=arr.get_element(pedidos, i)
+        precio=float(pedido["Price_per_Box"])
+        if precio >= p_min and precio <= p_max:
+            cantidad_pedidos_en_rango += 1
+            sll.add_last(pedidos_en_rango, pedido)
+            
+    if sll.size(pedidos_en_rango) == 0:
+            return False
+        
+    resultado["cantidad_pedidos_en_rango"]=cantidad_pedidos_en_rango
+    
+    actual=pedidos_en_rango["first"]
+    suma_discount=0
+    suma_marketing=0
+    suma_price=0
+    mas_r=sll.first_element(pedidos_en_rango)
+    mayor_a=sll.first_element(pedidos_en_rango)
+    menor_a=sll.first_element(pedidos_en_rango)
+    
+    
+    while actual is not None:
+        pedido=actual["info"]
+        suma_discount += float(pedido["Discount_Pct"])
+        suma_marketing += float(pedido["Marketing_Spend"])
+        suma_price += float(pedido["Price_per_Box"])
+        comparacion_r = None
+        comparacion_mayor_a = None
+        comparacion_menor_a = None
+        
+        if pedido["Order_Date"] > mas_r["Order_Date"]:
+            comparacion_r= -1
+        elif pedido["Order_Date"] == mas_r["Order_Date"]:
+            comparacion_r=0
+       
+        if float(pedido["Amount"]) > float(mayor_a["Amount"]):
+            comparacion_mayor_a=-1
+        elif float(pedido["Amount"]) == float(mayor_a["Amount"]):
+            comparacion_mayor_a=0
+            
+        
+        if float(pedido["Amount"]) < float(menor_a["Amount"]):
+            comparacion_menor_a=1
+        elif float(pedido["Amount"]) == float(menor_a["Amount"]):
+            comparacion_menor_a=0
+        
+        if comparacion_r == -1:
+            mas_r=pedido
+            
+        if comparacion_r == 0:
+            if float(pedido["Amount"]) > float(mas_r["Amount"]):
+                mas_r = pedido
+                
+        if comparacion_mayor_a == -1:
+            mayor_a=pedido
+        
+        
+        if comparacion_mayor_a == 0:
+            if float(mayor_a["Price_per_Box"]) > float(pedido["Price_per_Box"]):
+                mayor_a = pedido
+                
+        if comparacion_menor_a == 1:
+                    menor_a=pedido
+                    
+        
+        if comparacion_menor_a == 0:
+            if float(menor_a["Price_per_Box"]) > float(pedido["Price_per_Box"]):
+                menor_a = pedido
+                
+        actual=actual["next"]
+        
+        
+    promedio_Discount_Pct=suma_discount/cantidad_pedidos_en_rango
+    resultado["promedio_de_Discount_Pct"]=promedio_Discount_Pct
+    
+    promedio_Marketing_Spend=suma_marketing/cantidad_pedidos_en_rango
+    resultado["promedio_de_Marketing_Spend"]=promedio_Marketing_Spend
+    
+    promedio_Price_per_Box=suma_price/cantidad_pedidos_en_rango
+    resultado["promedio_de_Price_per_Box"]=promedio_Price_per_Box
+    
+    mas_r_final = (f"Producto: {mas_r['Product']}\n"
+                 f"Pais: {mas_r['Country']}\n"
+                 f"Canal: {mas_r['Channel']}\n"
+                 f"Fecha: {mas_r['Order_Date']}\n"
+                 f"Precio por caja: {mas_r['Price_per_Box']}\n"
+                 f"Monto: {mas_r['Amount']}\n"
+    )
+    resultado["pedido_mas_reciente"]=mas_r_final
+    
+    mayor_precio_final = (f"Producto: {mayor_a['Product']}\n"
+                     f"Pais: {mayor_a['Country']}\n"
+                     f"Canal: {mayor_a['Channel']}\n"
+                     f"Fecha: {mayor_a['Order_Date']}\n"
+                     f"Precio por caja: {mayor_a['Price_per_Box']}\n"
+                     f"Monto: {mayor_a['Amount']}\n"
+                     )
+    resultado["pedido_mayor_precio_total"]=mayor_precio_final
+    
+    menor_precio_final = (f"Producto: {menor_a["Product"]}\n"
+                     f"Pais: {menor_a["Country"]}\n"
+                     f"Canal: {menor_a["Channel"]}\n"
+                     f"Fecha: {menor_a["Order_Date"]}\n"
+                     f"Precio por caja: {menor_a["Price_per_Box"]}\n"
+                     f"Monto: {menor_a["Amount"]}\n"
+    )
+    resultado["pedido_menor_precio_total"]=menor_precio_final
+
+
+
+    fin=get_time()
+    tiempo_ejecucion=delta_time(inicio, fin)
+    resultado["tiempo_ejecucion"]=tiempo_ejecucion
+    return resultado
 
 
 def req_3(catalog):
@@ -235,12 +355,106 @@ def req_4(catalog):
     pass
 
 
-def req_5(catalog):
+def req_5(catalog, filtro, producto, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
+    inicio = get_time()
+    resultado = {}
+    if filtro == 1:
+        filtro = "MAYOR"
+    
+    if filtro == 2:
+        filtro = "MENOR"
+        
+    resultado["Filtro"] = filtro
+    pedidos=catalog["chocolate_sale"]
+    
+    
+    pedidos_en_rango_f=sll.new_list()
+    cantidad_pedidos_en_rango_f=0
+    
+    suma_price = 0.0
+    suma_boxes = 0.0
+    suma_marketing = 0.0
+    for i in range(arr.size(pedidos)):
+        pedido=arr.get_element(pedidos, i)
+        if pedido["Product"] == producto:
+            fecha=pedido["Order_Date"]
+            if fecha >= fecha_inicial and fecha <= fecha_final:
+                cantidad_pedidos_en_rango_f += 1
+                sll.add_last(pedidos_en_rango_f, pedido)
+                suma_price += float(pedido["Price_per_Box"])
+                suma_boxes += float(pedido["Boxes_Shipped"])
+                suma_marketing += float(pedido["Marketing_Spend"])
+
+    if sll.size(pedidos_en_rango_f) == 0:
+        return False
+    
+    resultado["cantidad_pedidos_en_rango_fecha"]=cantidad_pedidos_en_rango_f
+    resultado["promedio_price"]=suma_price/cantidad_pedidos_en_rango_f
+    resultado["promedio_boxes"]=suma_boxes/cantidad_pedidos_en_rango_f
+    resultado["promedio_marketing"]=suma_marketing/cantidad_pedidos_en_rango_f
+
+    actual=pedidos_en_rango_f["first"]
+    
+    mayor=sll.first_element(pedidos_en_rango_f)
+    menor=sll.first_element(pedidos_en_rango_f)
+            
+    if filtro == "MAYOR":
+        while actual is not None:
+            pedido=actual["info"]
+            
+            if float(pedido["Amount"]) > float(mayor["Amount"]):
+                mayor=pedido
+            elif float(pedido["Amount"]) == float(mayor["Amount"]):
+                if float(pedido["Price_per_Box"]) < float(mayor["Price_per_Box"]):
+                    mayor=pedido
+                elif float(pedido["Price_per_Box"]) == float(mayor["Price_per_Box"]):
+                    if float(pedido["Marketing_Spend"]) < float(mayor["Marketing_Spend"]):
+                        mayor=pedido
+            
+            actual=actual["next"]
+        mayor_final = (f"Precio por caja: {mayor['Price_per_Box']}\n"
+                       f"Cajas enviadas: {mayor['Boxes_Shipped']}\n"
+                       f"Monto: {mayor['Amount']}\n"
+                       f"Canal: {mayor['Channel']}\n"
+                       f"Fecha: {mayor['Order_Date']}\n"
+                       f"Inversión en mercadeo: {mayor['Marketing_Spend']}\n"
+                       )
+        resultado["pedido_mayor_amount"]=mayor_final
+    
+    if filtro == "MENOR":
+        while actual is not None:
+            pedido=actual["info"]
+                
+            if float(pedido["Amount"]) < float(menor["Amount"]):
+                menor=pedido
+            elif float(pedido["Amount"]) == float(menor["Amount"]):
+                if float(pedido["Price_per_Box"]) < float(menor["Price_per_Box"]):
+                    menor=pedido
+                elif float(pedido["Price_per_Box"]) == float(menor["Price_per_Box"]):
+                    if float(pedido["Marketing_Spend"]) < float(menor["Marketing_Spend"]):
+                        menor=pedido
+
+                
+            actual=actual["next"]
+        menor_final = (f"Precio por caja: {menor['Price_per_Box']}\n"
+                       f"Cajas enviadas: {menor['Boxes_Shipped']}\n"
+                       f"Monto: {menor['Amount']}\n"
+                       f"Canal: {menor['Channel']}\n"
+                       f"Fecha: {menor['Order_Date']}\n"
+                       f"Inversión en mercadeo: {menor['Marketing_Spend']}\n"
+                       )
+        resultado["pedido_menor_amount"]=menor_final
+
+    
+    final = get_time()
+    tiempo_final = delta_time(inicio, final)
+    resultado["Tiempo"] = tiempo_final
+    
+    return resultado
 
 
 def req_6(catalog, fecha_inicio, fecha_fin):
