@@ -28,6 +28,43 @@ def load_data(control):
     #TODO: Realizar la carga de datos
     result = logic.load_data(control)
     
+    def load_data(control):
+    """
+    Carga los datos
+    """
+    result = logic.load_data(control)
+    
+    print(f"\nTiempo de carga: {result['total_time']:.2f} ms")
+    print(f"Total de pedidos cargados: {result['total_pedidos']}")
+    
+    print("\n--- Pedido de menor precio total ---")
+    pmin = result["product_min"]
+    print(f"Order_ID: {pmin['Order_ID']}")
+    print(f"Producto: {pmin['Product']}")
+    print(f"Pais: {pmin['Country']}")
+    print(f"Canal: {pmin['Channel']}")
+    print(f"Fecha: {pmin['Order_Date']}")
+    print(f"Precio por caja: {pmin['Price_per_Box']}")
+    print(f"Monto: {pmin['Amount']}")
+    
+    print("\n--- Pedido de mayor precio total ---")
+    pmax = result["product_max"]
+    print(f"Order_ID: {pmax['Order_ID']}")
+    print(f"Producto: {pmax['Product']}")
+    print(f"Pais: {pmax['Country']}")
+    print(f"Canal: {pmax['Channel']}")
+    print(f"Fecha: {pmax['Order_Date']}")
+    print(f"Precio por caja: {pmax['Price_per_Box']}")
+    print(f"Monto: {pmax['Amount']}")
+    
+    print("\n--- Primeros 5 registros cargados ---")
+    for order in result["first_five"]["elements"]:
+        print(f"{order['Order_ID']} | {order['Product']} | {order['Country']} | {order['Channel']} | {order['Order_Date']} | {order['Price_per_Box']} | {order['Amount']}")
+    
+    print("\n--- Ultimos 5 registros cargados ---")
+    for order in result["last_five"]["elements"]:
+        print(f"{order['Order_ID']} | {order['Product']} | {order['Country']} | {order['Channel']} | {order['Order_Date']} | {order['Price_per_Box']} | {order['Amount']}")
+    
     
 def print_data(control, id):
     """
@@ -55,11 +92,30 @@ def print_req_1(control):
         print("No encontrado")
         return
     
-    filas = []
-    for llave in retorno:
-        filas.append([llave, retorno[llave]])
+    print(f"\nTiempo de ejecucion: {retorno['total_time']:.2f} ms")
+    print(f"Total de pedidos: {retorno['total_pedidos']}")
     
-    print(tabulate(filas, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
+    print(f"\nPrecio por caja - promedio: {retorno['price_promedio']:.2f}, min: {retorno['price_min']}, max: {retorno['price_max']}")
+    print(f"Descuento - promedio: {retorno['discount_promedio']:.2f}, min: {retorno['discount_min']}, max: {retorno['discount_max']}")
+    print(f"Cajas enviadas - promedio: {retorno['boxes_promedio']:.2f}, min: {retorno['boxes_min']}, max: {retorno['boxes_max']}")
+    print(f"Inversion en mercadeo - promedio: {retorno['marketing_promedio']:.2f}, min: {retorno['marketing_min']}, max: {retorno['marketing_max']}")
+    print(f"\nAño con mas pedidos: {retorno['year_mas_pedidos']}")
+    
+    mayor = retorno["pedido_mayor_amount"]
+    print("\n--- Pedido de mayor Amount ---")
+    print(f"Order_ID: {mayor['Order_ID']}")
+    print(f"Pais: {mayor['Country']}")
+    print(f"Fecha: {mayor['Order_Date']}")
+    print(f"Precio por caja: {mayor['Price_per_Box']}")
+    print(f"Monto: {mayor['Amount']}")
+    
+    menor = retorno["pedido_menor_amount"]
+    print("\n--- Pedido de menor Amount ---")
+    print(f"Order_ID: {menor['Order_ID']}")
+    print(f"Pais: {menor['Country']}")
+    print(f"Fecha: {menor['Order_Date']}")
+    print(f"Precio por caja: {menor['Price_per_Box']}")
+    print(f"Monto: {menor['Amount']}")
 
 def print_req_2(control):
     """
@@ -127,7 +183,6 @@ def print_req_6(control):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 6
     fecha_inicio = input("Fecha inicial: ")
     fecha_fin = input("Fecha final: ")
     
@@ -137,11 +192,27 @@ def print_req_6(control):
         print("No encontrado")
         return
     
-    filas = []
-    for llave in retorno:
-        filas.append([llave, retorno[llave]])
+    print(f"\nTiempo de ejecucion: {retorno['total_time']:.2f} ms")
+    print(f"Total de pedidos en el rango: {retorno['total_pedidos']}")
     
-    print(tabulate(filas, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
+    print(f"\nCanal mas usado: {retorno['ruta_mas_usada']} ({retorno['ruta_mas_usada_pedidos']} pedidos, recaudo: {retorno['ruta_mas_usada_recaudo']:.2f})")
+    print(f"Canal que mas recauda: {retorno['ruta_mas_recauda']} ({retorno['ruta_mas_recauda_pedidos']} pedidos, recaudo: {retorno['ruta_mas_recauda_recaudo']:.2f})")
+    
+    print("\n--- Reporte por canal ---")
+    for canal in retorno["reporte_rutas"]["elements"]:
+        print(f"\nCanal: {canal['channel']}")
+        print(f"Total pedidos: {canal['total_pedidos']}")
+        print(f"Total recaudo: {canal['total_recaudo']:.2f}")
+        print(f"Precio promedio: {canal['price_promedio']:.2f}")
+        print(f"Marketing promedio: {canal['marketing_promedio']:.2f}")
+        
+        pmax = canal["pedido_max"]
+        if pmax is not None:
+            print(f"Pedido mas costoso -> Order_ID: {pmax['Order_ID']}, Producto: {pmax['Product']}, Pais: {pmax['Country']}, Fecha: {pmax['Order_Date']}, Cajas: {pmax['Boxes_Shipped']}, Monto: {pmax['Amount']}")
+        
+        pmin = canal["pedido_min"]
+        if pmin is not None:
+            print(f"Pedido mas barato -> Order_ID: {pmin['Order_ID']}, Producto: {pmin['Product']}, Pais: {pmin['Country']}, Fecha: {pmin['Order_Date']}, Cajas: {pmin['Boxes_Shipped']}, Monto: {pmin['Amount']}")
 
 # Se crea la lógica asociado a la vista
 control = new_logic()

@@ -23,8 +23,8 @@ def load_data(catalog):
     first_five = arr.new_list()
     last_five = queue.new_queue()
     
-    chocolatefile = data_dir + "chocolate_sale_15_elements.csv"
-    input_file = csv.DictReader(open(chocolatefile, encoding='utf-8'))
+    chocolatefile = data_dir + "chocolate_sale_20_ptc.csv"
+    input_file = csv.DictReader(open(chocolatefile, encoding='utf-8-sig'))
     for order in input_file:
         arr.add_last(catalog['chocolate_sale'], order)
         
