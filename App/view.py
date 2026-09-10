@@ -28,12 +28,6 @@ def load_data(control):
     #TODO: Realizar la carga de datos
     result = logic.load_data(control)
     
-    def load_data(control):
-    """
-    Carga los datos
-    """
-    result = logic.load_data(control)
-    
     print(f"\nTiempo de carga: {result['total_time']:.2f} ms")
     print(f"Total de pedidos cargados: {result['total_pedidos']}")
     
