@@ -430,7 +430,108 @@ def req_4(catalog, product, country):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
-    pass
+    
+    start_time = get_time()
+        
+    sales_list = catalog['chocolate_sale']
+    total_elements = arr.size(sales_list)
+        
+    count = 0
+    sum_price = 0.0
+    sum_discount = 0.0
+    sum_marketing = 0.0
+    sum_boxes = 0
+    
+    amount_1 = None
+    amount_2 = None
+    
+    def is_better(order_a, order_b):
+        """
+        Retorna True si order_a tiene mayor Amount
+        
+        """
+        if order_b is None:
+            return True
+
+        if order_a['Amount'] > order_b['Amount']:
+            return True
+        elif order_a['Amount'] < order_b['Amount']:
+            return False
+
+        if order_a['Marketing_Spend'] < order_b['Marketing_Spend']:
+            return True
+        elif order_a['Marketing_Spend'] > order_b['Marketing_Spend']:
+            return False
+
+        return order_a['Order_ID'] < order_b['Order_ID']
+    
+    for i in range(total_elements):
+        order = arr.get_element(sales_list, i)
+
+        if order['Product'] == product and order['Country'] == country:
+            count += 1
+            sum_price += order['Price_per_Box']
+            sum_discount += order['Discount_Pct']
+            sum_marketing += order['Marketing_Spend']
+            sum_boxes += order['Boxes_Shipped']
+
+            if is_better(order, top_1):
+                top_2 = top_1
+                top_1 = order
+            elif is_better(order, top_2):
+                top_2 = order
+                
+    end_time = get_time()
+    execution_time = delta_time(start_time, end_time)
+
+    if count == 0:
+        return {
+            "execution_time": execution_time,
+            "count": 0,
+            "avg_price": 0.0,
+            "avg_discount": 0.0,
+            "avg_marketing": 0.0,
+            "avg_boxes": 0.0,
+            "top_orders": []
+        }
+
+    avg_price = sum_price / count
+    avg_discount = sum_discount / count
+    avg_marketing = sum_marketing / count
+    avg_boxes = sum_boxes / count
+
+    top_orders = arr.new_list()
+
+    if amount_1 is not None:
+        order_dict_1 = {
+            "Order_ID": amount_1["Order_ID"],
+            "Channel": amount_1["Channel"],
+            "Order_Date": amount_1["Order_Date"],
+            "Boxes_Shipped": amount_1["Boxes_Shipped"],
+            "Amount": amount_1["Amount"]
+        }
+        arr.add_last(top_orders, order_dict_1)
+
+    if amount_2 is not None:
+        order_dict_2 = {
+            "Order_ID": amount_2["Order_ID"],
+            "Channel": amount_2["Channel"],
+            "Order_Date": amount_2["Order_Date"],
+            "Boxes_Shipped": amount_2["Boxes_Shipped"],
+            "Amount": amount_2["Amount"]
+        }
+        arr.add_last(top_orders, order_dict_2)
+    
+    return {
+        "execution_time": execution_time,
+        "count": count,
+        "avg_price": avg_price,
+        "avg_discount": avg_discount,
+        "avg_marketing": avg_marketing,
+        "avg_boxes": avg_boxes,
+        "top_orders": top_orders
+    }
+
 
 
 def req_5(catalog, filtro, producto, fecha_inicial, fecha_final):
