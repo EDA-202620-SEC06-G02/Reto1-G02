@@ -353,7 +353,7 @@ def req_2(catalog, p_min, p_max):
     return resultado
 
 
-def req_3(catalog):
+def req_3(catalog, country, channel):
     """
     Retorna el resultado del requerimiento 3
     """
@@ -376,7 +376,7 @@ def req_3(catalog):
     for i in range(total_elements):
         order = arr.get_element(sales_list, i)
 
-        if order['Country'] == Country and order['Channel'] == Channel:
+        if order['Country'] == country and order['Channel'] == channel:
             count += 1
             sum_price += order['Price_per_Box']
             sum_discount += order['Discount_Pct']
