@@ -59,10 +59,12 @@ def print_req_2(control):
     if retorno == False:
         print("No hay pedidos en el rango de precios")
         return
-    encabezado=list(retorno.keys())
-    filas=[list(retorno.values())]
+    encabezado=retorno.keys()
+    filas=retorno.values()
     
-    print(tabulate(filas, headers=encabezado, tablefmt="fancy_grid"))
+    tabla_vertical=zip(encabezado, filas)
+    
+    print(tabulate(tabla_vertical, headers=["Requerimiento", "Resultado"], tablefmt="fancy_grid"))
     pass
 
 
